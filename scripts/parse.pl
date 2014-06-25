@@ -58,59 +58,38 @@ push(@todo, "minimize duplicate strings in po files - http://www.perlmonks.org/?
 # @param branch Named k:v pair listing appropriate repo branch as defined in commotion-feed. Value of name parameter.
 #*
 my %repos = (
-	'luci-commotion-apps' => {
-		'source' => 'https://github.com/opentechinstitute/luci-commotion-apps.git',
-		'branch' => 'master',
-	},
-	
-	'luci-theme-commotion' => {
-		'source' => 'https://github.com/opentechinstitute/luci-theme-commotion.git',
-		'branch' => 'master',
-	},
-	'luci-commotion' => {
-		'source' => 'https://github.com/opentechinstitute/luci-commotion.git',
-		'branch' => 'master',
-	},
-	'commotion-dashboard-helper' => {
-		'source' => 'https://github.com/opentechinstitute/commotion-dashboard-helper.git',
-		'branch' => 'master',
-	}, 
-	'commotiond commotion-service-manager' => {
-		'source' => 'https://github.com/opentechinstitute/commotion-service-manager.git',
-		'branch' => 'master',
-	},
-	'commotion-router' => {
-		'source' => 'https://github.com/opentechinstitute/commotion-router.git',
-		'branch' => 'master',
-	},
-	'commotion-feed' => {
-		'source' => 'https://github.com/opentechinstitute/commotion-feed.git',
-		'branch' => 'master',
-	}, 
-	'commotion-lua-helpers' => {
-		'source' => 'https://github.com/opentechinstitute/commotion-lua-helpers.git',
-		'branch' => 'master',
-	},
-	'serval-dna' => {
-		'source' => 'https://github.com/opentechinstitute/commotion-dashboard-helper.git',
-		'branch' => 'commotion-wireless',
-	},
-	'luci-commotion-splash' => {
-		'source' => 'https://github.com/opentechinstitute/luci-commotion-splash.git',
-		'branch' => 'master',
-	},
-	'commotion-debug-helper' => {
-		'source' => 'https://github.com/opentechinstitute/commotion-debug-helper.git',
-		'branch' => 'master',
-	},
-	'luci-i18n-commotion' => {
-		'source' => 'https://github.com/opentechinstitute/luci-i18n-commotion.git',
-		'branch' => 'master',
-	}, 
-	'olsrd' => {
-		'source' => 'https://github.com/opentechinstitute/olsrd.git',
-		'branch' => 'master',
-	},
+        'commotion-router' => {
+                'source' => 'https://github.com/opentechinstitute/commotion-router.git',
+                'branch' => 'master',
+        },
+        'commotion-feed' => {
+                'source' => 'https://github.com/opentechinstitute/commotion-feed.git',
+                'branch' => 'master',
+        }, 
+        'commotiond' => {
+            'source' => 'https://github.com/opentechinstitute/commotiond.git',
+            'branch' => 'master',
+        },
+        'commotion-service-manager' => {
+            'source' => 'https://github.com/opentechinstitute/commotion-service-manager.git',
+            'branch' => 'master',
+        },
+        'luci-commotion' => {
+            'source' => 'https://github.com/opentechinstitute/luci-commotion.git',
+            'branch' => 'master',
+        },
+        'luci-i18n-commotion' => {
+            'source' => 'https://github.com/opentechinstitute/luci-i18n-commotion.git',
+            'branch' => 'master',
+        }, 
+        'olsrd' => {
+            'source' => 'https://github.com/opentechinstitute/olsrd.git',
+            'branch' => 'master',
+        },
+        'serval-dna' => {
+            'source' => 'https://github.com/opentechinstitute/serval-dna.git',
+            'branch' => 'commotion-wireless',
+        },
 );
 
 #**
