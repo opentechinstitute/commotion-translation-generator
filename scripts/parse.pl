@@ -204,10 +204,10 @@ foreach my $file (@working_source_files) {
     chomp $file;
     if ($verbosity == 1) { print "Populating string table from $file\n"; }
     # read file into $raw
-    if( open S, "< $file" ) {
+    if( open my $S, "<", $file ) {
         local $/ = undef;
-        my $raw = <S>;
-        close S;
+        my $raw = <$S>;
+        close $S;
 
         my @res = Extract_Translations($raw);
         if (@res) {
@@ -386,9 +386,9 @@ sub Fetch_Translations {
     my $working_po_file = pop(@_);
     if ($verbosity == 1) { print "Getting translations for $working_po_file\n"; }
         my %translations;
-        open(WPO, "< $working_po_file") || die "Couldn't open translation file: $!\n";
-        my @wpo = <WPO>;
-        close(WPO);
+        open(my $WPO, "<", $working_po_file) || die "Couldn't open translation file: $!\n";
+        my @wpo = <$WPO>;
+        close($WPO);
         for (my $i = 0; $i < $#wpo; $i++) {
             local $/ = "";
             chomp($wpo[$i]);
@@ -425,8 +425,8 @@ sub _Generate_PO_Header {
     $dt = $dt.'\n"';
     #my $date = strftime "%Y-%m-%d %R\n";
     #"PO-Revision-Date: 2013-08-16 20:50+0000\n"
-    open(WPF, "< $working_po_file");
-    while(<WPF>) {
+    open(my $WPF, "<", $working_po_file);
+    while(<$WPF>) {
         chomp;
         if ($_ =~ m|^\"PO-Revision-Date\:\ |) {
             $_ = $& . $dt;
@@ -434,7 +434,7 @@ sub _Generate_PO_Header {
         push(@po_header, $_);
         last if ($_ =~ m|^"Plural|);
     }
-    close(WPF);
+    close($WPF);
     return(@po_header);
 }
 
@@ -487,14 +487,14 @@ sub Write_PO_File {
     # NOTE: po_header and po_body are array references
     my ($working_po_file, $po_header, $po_body) = @_;
 
-    open(WPO, "> $working_po_file") || die "Couldn't open $working_po_file: $!\n";
+    open(my $WPO, ">", $working_po_file) || die "Couldn't open $working_po_file: $!\n";
     foreach (@{$po_header}) {
-        print WPO $_,"\n";
+        print $WPO $_,"\n";
     }
     foreach (@{$po_body}) {
-        print WPO $_,"\n";
+        print $WPO $_,"\n";
     }
-    close(WPO);
+    close($WPO);
     return;
 }
 
