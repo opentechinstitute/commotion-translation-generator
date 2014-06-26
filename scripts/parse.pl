@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl
 
 #**
 # @file parse.pl
@@ -31,6 +31,7 @@
 #*
 
 use strict;
+use warnings;
 use File::Path qw(make_path remove_tree);
 use Git::Repository;
 use File::Copy;
@@ -38,19 +39,21 @@ use File::Next;
 use Text::Balanced qw(extract_bracketed extract_delimited extract_tagged);
 use DateTime;
 
+our $VERSION = 0.3.0;
+
 #**
 # @var verbosity Print debug messages
 # @param 0|1 0 == off, 1 == on
 #*
 my $verbosity = 1;
 my @todo      = ("\n\nTo Do:");
-push( @todo, "Fix use vs. require" );
+push( @todo, 'Fix use vs. require' );
 
 ## TODO: for next major revision:
 ## Look for ways to minimize string overlap
 ## http://www.perlmonks.org/?node_id=816086
 push( @todo,
-"minimize duplicate strings in po files - http://www.perlmonks.org/?node_id=816086"
+'minimize duplicate strings in po files - http://www.perlmonks.org/?node_id=816086'
 );
 
 #**
