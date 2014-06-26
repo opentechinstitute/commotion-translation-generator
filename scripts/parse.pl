@@ -43,13 +43,15 @@ use DateTime;
 # @param 0|1 0 == off, 1 == on
 #*
 my $verbosity = 1;
-my @todo = ("\n\nTo Do:");
-push(@todo, "Fix use vs. require");
+my @todo      = ("\n\nTo Do:");
+push( @todo, "Fix use vs. require" );
 
 ## TODO: for next major revision:
 ## Look for ways to minimize string overlap
 ## http://www.perlmonks.org/?node_id=816086
-push(@todo, "minimize duplicate strings in po files - http://www.perlmonks.org/?node_id=816086");
+push( @todo,
+"minimize duplicate strings in po files - http://www.perlmonks.org/?node_id=816086"
+);
 
 #**
 # @var repos Repos to be scanned for translatable strings
@@ -65,13 +67,14 @@ my %repos = (
     'commotion-feed' => {
         'source' => 'https://github.com/opentechinstitute/commotion-feed.git',
         'branch' => 'master',
-    }, 
+    },
     'commotiond' => {
         'source' => 'https://github.com/opentechinstitute/commotiond.git',
         'branch' => 'master',
     },
     'commotion-service-manager' => {
-        'source' => 'https://github.com/opentechinstitute/commotion-service-manager.git',
+        'source' =>
+          'https://github.com/opentechinstitute/commotion-service-manager.git',
         'branch' => 'master',
     },
     'luci-commotion' => {
@@ -79,9 +82,10 @@ my %repos = (
         'branch' => 'master',
     },
     'luci-i18n-commotion' => {
-        'source' => 'https://github.com/opentechinstitute/luci-i18n-commotion.git',
+        'source' =>
+          'https://github.com/opentechinstitute/luci-i18n-commotion.git',
         'branch' => 'master',
-    }, 
+    },
     'olsrd' => {
         'source' => 'https://github.com/opentechinstitute/olsrd.git',
         'branch' => 'master',
@@ -93,22 +97,24 @@ my %repos = (
 );
 
 #**
-# @section Directories 
+# @section Directories
 # @brief Define internal directory structure, including translation source and working area.
 # Include trailing slashes!
 #*
-my $working_dir = 'working/';
-my $working_source_dir = $working_dir . 'source/';
+my $working_dir              = 'working/';
+my $working_source_dir       = $working_dir . 'source/';
 my $working_translations_dir = $working_dir . 'translations/';
-my $stable_translations_dir = $working_source_dir . 'luci-i18n-commotion/translations/';
+my $stable_translations_dir =
+  $working_source_dir . 'luci-i18n-commotion/translations/';
 
 #**
 # @brief Prepare working directories
 #*
-if (not -e $working_dir) {
+if ( not -e $working_dir ) {
     print("Creating working directories\n");
-    make_path($working_dir, $working_source_dir, $working_translations_dir, {verbose=>1})
-        || die "ERROR: Couldn't create " . $working_dir . "\n";
+    make_path( $working_dir, $working_source_dir, $working_translations_dir,
+        { verbose => 1 } )
+      || die "ERROR: Couldn't create " . $working_dir . "\n";
 }
 
 #**
@@ -116,34 +122,43 @@ if (not -e $working_dir) {
 # If working copy does not exist, clone it and check out proper branch.
 # If working copy does exist, check out proper branch and pull updates.
 #*
-foreach my $repo (keys %repos) {
-    if (not -e $working_source_dir . $repo) {
-        print("Cloning " . $repo . " into " . $working_source_dir ."\n");
-        Git::Repository->run( clone => $repos{$repo}{'source'} => $working_source_dir . $repo)
-            || warn "Couldn't clone " . $repos{$repo}{'source'} . "\n";
-        my $r = Git::Repository->new( work_tree => $working_source_dir . $repo);
+foreach my $repo ( keys %repos ) {
+    if ( not -e $working_source_dir . $repo ) {
+        print( "Cloning " . $repo . " into " . $working_source_dir . "\n" );
+        Git::Repository->run(
+            clone => $repos{$repo}{'source'} => $working_source_dir . $repo )
+          || warn "Couldn't clone " . $repos{$repo}{'source'} . "\n";
+        my $r =
+          Git::Repository->new( work_tree => $working_source_dir . $repo );
         print("\tChecking out $repos{$repo}{'branch'} branch\n");
-        $r->command(checkout => $repos{$repo}{'branch'}) || die "Couldn't check out proper branch\n";
-    } else {
-        print("Updating " . $repo . "\n");
-        my $r = Git::Repository->new( work_tree => $working_source_dir . $repo);
-        $r->command(checkout => $repos{$repo}{'branch'}) || die "Couldn't check out proper branch\n";
-        $r->command(pull => 'origin', $repos{$repo}{'branch'}, { quiet => 1 }) || warn "Couldn't pull remotes\n";
+        $r->command( checkout => $repos{$repo}{'branch'} )
+          || die "Couldn't check out proper branch\n";
+    }
+    else {
+        print( "Updating " . $repo . "\n" );
+        my $r =
+          Git::Repository->new( work_tree => $working_source_dir . $repo );
+        $r->command( checkout => $repos{$repo}{'branch'} )
+          || die "Couldn't check out proper branch\n";
+        $r->command(
+            pull => 'origin',
+            $repos{$repo}{'branch'}, { quiet => 1 }
+        ) || warn "Couldn't pull remotes\n";
     }
 }
-
 
 #**
 # @section Locate Translation Files
 # @brief Find current set of translation files (.po) and copy to working area
-#* 
-push(@todo, "add transifex github integration");
+#*
+push( @todo, "add transifex github integration" );
 
-opendir(DIR, $stable_translations_dir) or warn "Couldn't open stable po dir: $!";
-my @po_files = glob "$stable_translations_dir*.po"; 
+opendir( DIR, $stable_translations_dir )
+  or warn "Couldn't open stable po dir: $!";
+my @po_files = glob "$stable_translations_dir*.po";
 closedir(DIR);
 
-for (0..$#po_files){
+for ( 0 .. $#po_files ) {
     $po_files[$_] =~ s/^$stable_translations_dir//;
 }
 
@@ -152,12 +167,14 @@ for (0..$#po_files){
 #*
 if (@po_files) {
     foreach (@po_files) {
-        if ($verbosity == 1) { 
+        if ( $verbosity == 1 ) {
             print("Copying $_ to $working_translations_dir\n");
         }
-        copy($stable_translations_dir . $_, $working_translations_dir . $_) || die "Couldn't copy PO file $_: $!\n";
+        copy( $stable_translations_dir . $_, $working_translations_dir . $_ )
+          || die "Couldn't copy PO file $_: $!\n";
     }
-} else {
+}
+else {
     warn "Couldn't find any stable PO files!\n";
 }
 
@@ -167,7 +184,6 @@ if (@po_files) {
 # and separating strings from their tags.
 #*
 
-
 #**
 # @brief File Scan Options
 # @param descend_filter define directories to be searched or ignored
@@ -176,16 +192,16 @@ if (@po_files) {
 my $descend_filter = sub { $_ ne '.git' };
 my $file_filter = sub { $_ =~ '.htm' or $_ =~ '.lua' };
 my @working_source_files;
-my $scan = File::Next::files( 
+my $scan = File::Next::files(
     {
         descend_filter => $descend_filter,
-        file_filter => $file_filter,
-        error_handler => sub { my $msg = shift; warn($msg) },
+        file_filter    => $file_filter,
+        error_handler  => sub { my $msg = shift; warn($msg) },
     },
     $working_source_dir
 );
-while (defined(my $file = $scan->())) {
-    push(@working_source_files, $file);
+while ( defined( my $file = $scan->() ) ) {
+    push( @working_source_files, $file );
 }
 
 #**
@@ -202,20 +218,21 @@ while (defined(my $file = $scan->())) {
 my %stringtable;
 foreach my $file (@working_source_files) {
     chomp $file;
-    if ($verbosity == 1) { print "Populating string table from $file\n"; }
+    if ( $verbosity == 1 ) { print "Populating string table from $file\n"; }
+
     # read file into $raw
-    if( open my $S, "<", $file ) {
+    if ( open my $S, "<", $file ) {
         local $/ = undef;
         my $raw = <$S>;
         close $S;
 
         my @res = Extract_Translations($raw);
         if (@res) {
-            push(@{ $stringtable{$file} }, @res);
+            push( @{ $stringtable{$file} }, @res );
         }
         my @code = Extract_Luci_Translations($raw);
         if (@code) {
-            push(@{ $stringtable{$file} }, @code);
+            push( @{ $stringtable{$file} }, @code );
         }
     }
 }
@@ -228,9 +245,10 @@ foreach my $file (@working_source_files) {
 # @see _Generate_PO_Header()
 # @see Write_PO_File()
 #*
-foreach my $po_file (@po_files) { 
-    if ($verbosity == 1) { print "Salvaging translations from $po_file\n"; }
+foreach my $po_file (@po_files) {
+    if ( $verbosity == 1 ) { print "Salvaging translations from $po_file\n"; }
     my $translations = ();
+
     # English file can be overwritten each time
 
     # NOTE: we don't care about anything but msgid changes
@@ -238,28 +256,34 @@ foreach my $po_file (@po_files) {
 
     # Generate id:str pairs for PO files
     # NOTE: translations is a hash ref
-    unless ($po_file =~ m|-en.po$|) {
-        $translations = Fetch_Translations($working_translations_dir . $po_file);
+    unless ( $po_file =~ m|-en.po$| ) {
+        $translations =
+          Fetch_Translations( $working_translations_dir . $po_file );
     }
 
-    if ($verbosity == 1) { print "Generating file header for $po_file\n"; }
-    my @po_header = _Generate_PO_Header($working_translations_dir . $po_file);
+    if ( $verbosity == 1 ) { print "Generating file header for $po_file\n"; }
+    my @po_header = _Generate_PO_Header( $working_translations_dir . $po_file );
 
-    if ($verbosity == 1) { print "Generating file body for $po_file\n"; }
-    my @po_body = _Generate_PO_Body($working_translations_dir . $po_file, \%stringtable, $translations);
+    if ( $verbosity == 1 ) { print "Generating file body for $po_file\n"; }
+    my @po_body = _Generate_PO_Body( $working_translations_dir . $po_file,
+        \%stringtable, $translations );
 
     # Write File
     print "Writing to $working_translations_dir$po_file\n";
-    Write_PO_File($working_translations_dir . $po_file, \@po_header, \@po_body);
+    Write_PO_File( $working_translations_dir . $po_file,
+        \@po_header, \@po_body );
 }
 
-print "\n\n\nFile generation complete.\nNew PO files can be found in $working_translations_dir\n";
+print
+"\n\n\nFile generation complete.\nNew PO files can be found in $working_translations_dir\n";
 
 # Upload to Transifex/GitHub
 # http://support.transifex.com/customer/portal/topics/440186-api/articles
 
 # print to do list
-if ($verbosity == 1) { foreach (@todo) { print "$_\n"; } }
+if ( $verbosity == 1 ) {
+    foreach (@todo) { print "$_\n"; }
+}
 
 exit 0;
 
@@ -271,53 +295,61 @@ exit 0;
 #*
 sub Extract_Translations {
     my $text = pop(@_);
-    my @res = ();
-    my $res = "";
-    my $sub = "";
+    my @res  = ();
+    my $res  = "";
+    my $sub  = "";
+
     # search $text for translate flags
-    while( $text =~ s/ ^ .*? (?:translate|translatef|i18n|_) [\n\s]* \( /(/sgx ) {
+    while (
+        $text =~ s/ ^ .*? (?:translate|translatef|i18n|_) [\n\s]* \( /(/sgx )
+    {
         # separate usable $code from $text. $code and $text reverse of expected
-        ( my $code, $text ) = extract_bracketed($text, q{('")});
+        ( my $code, $text ) = extract_bracketed( $text, q{('")} );
+
         # strip newlines and extra whitespace out of $code
         $code =~ s/\\\n/ /g;
         $code =~ s/^\([\n\s]*//;
         $code =~ s/[\n\s]*\)$//;
 
-
-
         # Check code for quoted text. Store in $sub
-        if( $code =~ /^['"]/ ) {
-            while( defined $sub ) {
-                ( $sub, $code ) = extract_delimited($code, q{'"}, q{\s*(?:\.\.\s*)?});
+        if ( $code =~ /^['"]/ ) {
+            while ( defined $sub ) {
+                ( $sub, $code ) =
+                  extract_delimited( $code, q{'"}, q{\s*(?:\.\.\s*)?} );
 
-                if( defined $sub && length($sub) > 2 ) {
+                if ( defined $sub && length($sub) > 2 ) {
+
                     # use sub to build $res
                     $res .= substr $sub, 1, length($sub) - 2;
-                } else {
+                }
+                else {
                     undef $sub;
                 }
             }
+
             # Check code for tagged text. store in $res
-        } elsif( $code =~ /^(\[=*\[)/ ) {
+        }
+        elsif ( $code =~ /^(\[=*\[)/ ) {
             my $stag = quotemeta $1;
             my $etag = $stag;
             $etag =~ s/\[/]/g;
 
-            ( $res ) = extract_tagged($code, $stag, $etag);
+            ($res) = extract_tagged( $code, $stag, $etag );
 
             $res =~ s/^$stag//;
             $res =~ s/$etag$//;
         }
 
-    # Strip superfluous strings out of $res
-    $res = dec_lua_str($res);
-    if ($res) {
-        push(@res, $res);
-    }
-    # add $res to %stringtable
+        # Strip superfluous strings out of $res
+        $res = dec_lua_str($res);
+        if ($res) {
+            push( @res, $res );
+        }
+
+        # add $res to %stringtable
     }
     @res = uniq(@res);
-    return(@res);
+    return (@res);
 }
 
 #**
@@ -329,16 +361,16 @@ sub Extract_Translations {
 sub Extract_Luci_Translations {
     my $text = pop(@_);
     my @code;
-    while( $text =~ s/ ^ .*? <% -? [:_] /<%/sgx ) {
-        ( my $code, $text ) = extract_tagged($text, '<%', '%>');
+    while ( $text =~ s/ ^ .*? <% -? [:_] /<%/sgx ) {
+        ( my $code, $text ) = extract_tagged( $text, '<%', '%>' );
 
-        if( defined $code ) {
-            $code = dec_tpl_str(substr $code, 2, length($code) - 4);
+        if ( defined $code ) {
+            $code = dec_tpl_str( substr $code, 2, length($code) - 4 );
         }
-        push(@code, $code);
+        push( @code, $code );
     }
     @code = uniq(@code);
-    return(@code);
+    return (@code);
 }
 
 #**
@@ -347,8 +379,7 @@ sub Extract_Luci_Translations {
 # @brief Strip translation tags
 # @see Extract_Translations
 #*
-sub dec_lua_str
-{
+sub dec_lua_str {
     my $s = shift;
     $s =~ s/[\s\n]+/ /g;
     $s =~ s/\\n/\n/g;
@@ -365,8 +396,7 @@ sub dec_lua_str
 # @brief Strip translation tags
 # @see Extract_Luci_Translations
 #*
-sub dec_tpl_str
-{
+sub dec_tpl_str {
     my $s = shift;
     $s =~ s/-$//;
     $s =~ s/[\s\n]+/ /g;
@@ -384,20 +414,25 @@ sub dec_tpl_str
 #*
 sub Fetch_Translations {
     my $working_po_file = pop(@_);
-    if ($verbosity == 1) { print "Getting translations for $working_po_file\n"; }
-        my %translations;
-        open(my $WPO, "<", $working_po_file) || die "Couldn't open translation file: $!\n";
-        my @wpo = <$WPO>;
-        close($WPO);
-        for (my $i = 0; $i < $#wpo; $i++) {
-            local $/ = "";
-            chomp($wpo[$i]);
-            if ($wpo[$i] =~ m|^msgid|) {
-                my $mid = $wpo[$i];
-                unless ($wpo[$i+1] =~ m|^msgstr|) {
-                $mid = $mid . $wpo[$i+1];
-            } else {
-                my $mstr = $wpo[$i+1];
+    if ( $verbosity == 1 ) {
+        print "Getting translations for $working_po_file\n";
+    }
+    my %translations;
+    open( my $WPO, "<", $working_po_file )
+      || die "Couldn't open translation file: $!\n";
+    my @wpo = <$WPO>;
+    close($WPO);
+    for ( my $i = 0 ; $i < $#wpo ; $i++ ) {
+        local $/ = "";
+        chomp( $wpo[$i] );
+        if ( $wpo[$i] =~ m|^msgid| ) {
+            my $mid = $wpo[$i];
+            unless ( $wpo[ $i + 1 ] =~ m|^msgstr| ) {
+                $mid = $mid . $wpo[ $i + 1 ];
+            }
+            else {
+                my $mstr = $wpo[ $i + 1 ];
+
                 # quote removal might be better with extract
                 $mid =~ s|^msgid "?||;
                 $mid =~ s|"?$||;
@@ -418,24 +453,26 @@ sub Fetch_Translations {
 # @retval po_header Array containing header lines
 #*
 sub _Generate_PO_Header {
-    my $working_po_file = pop;	
+    my $working_po_file = pop;
     my @po_header;
+
     # DateTime is probably overkill
     my $dt = DateTime->now();
-    $dt = $dt.'\n"';
+    $dt = $dt . '\n"';
+
     #my $date = strftime "%Y-%m-%d %R\n";
     #"PO-Revision-Date: 2013-08-16 20:50+0000\n"
-    open(my $WPF, "<", $working_po_file);
-    while(<$WPF>) {
+    open( my $WPF, "<", $working_po_file );
+    while (<$WPF>) {
         chomp;
-        if ($_ =~ m|^\"PO-Revision-Date\:\ |) {
+        if ( $_ =~ m|^\"PO-Revision-Date\:\ | ) {
             $_ = $& . $dt;
         }
-        push(@po_header, $_);
-        last if ($_ =~ m|^"Plural|);
+        push( @po_header, $_ );
+        last if ( $_ =~ m|^"Plural| );
     }
     close($WPF);
-    return(@po_header);
+    return (@po_header);
 }
 
 #**
@@ -447,33 +484,35 @@ sub _Generate_PO_Header {
 # @retval wps Array containing header lines
 #*
 sub _Generate_PO_Body {
-    my ($working_po_file, $stringtable, $translations) = @_;
+    my ( $working_po_file, $stringtable, $translations ) = @_;
     my @wps = ();
 
     # Get k:v else write k:msgstr
-    foreach my $f (keys %{$stringtable}) {
+    foreach my $f ( keys %{$stringtable} ) {
         chomp($f);
-        push(@wps, "#: $f");
-        foreach my $id ( @{$stringtable->{$f}} ) {
+        push( @wps, "#: $f" );
+        foreach my $id ( @{ $stringtable->{$f} } ) {
             my $str;
-            if ($working_po_file =~ m|-en.po$|) {
+            if ( $working_po_file =~ m|-en.po$| ) {
                 $str = 'msgstr "' . $id . '"';
-            } else {
+            }
+            else {
                 # need to do better string extraction
                 if ( exists $translations->{$id} ) {
                     $str = 'msgstr "' . $translations->{$id} . '"';
-                } else {
+                }
+                else {
                     $str = 'msgstr ""';
                 }
             }
             my $mid = 'msgid "' . $id . '"';
-            push(@wps, $mid);
-            push(@wps, $str);
+            push( @wps, $mid );
+            push( @wps, $str );
         }
-        push(@wps, "\n");
+        push( @wps, "\n" );
     }
     @wps = uniq(@wps);
-    return(@wps);
+    return (@wps);
 }
 
 #**
@@ -484,15 +523,17 @@ sub _Generate_PO_Body {
 # @param po_body Array containing all new translatable strings and any relevant translations
 #*
 sub Write_PO_File {
-    # NOTE: po_header and po_body are array references
-    my ($working_po_file, $po_header, $po_body) = @_;
 
-    open(my $WPO, ">", $working_po_file) || die "Couldn't open $working_po_file: $!\n";
-    foreach (@{$po_header}) {
-        print $WPO $_,"\n";
+    # NOTE: po_header and po_body are array references
+    my ( $working_po_file, $po_header, $po_body ) = @_;
+
+    open( my $WPO, ">", $working_po_file )
+      || die "Couldn't open $working_po_file: $!\n";
+    foreach ( @{$po_header} ) {
+        print $WPO $_, "\n";
     }
-    foreach (@{$po_body}) {
-        print $WPO $_,"\n";
+    foreach ( @{$po_body} ) {
+        print $WPO $_, "\n";
     }
     close($WPO);
     return;
@@ -506,16 +547,17 @@ sub Write_PO_File {
 #*
 sub uniq {
     my %seen = ();
-    my @r = ();
+    my @r    = ();
+
     #**
     # Does not handle multidimensional arrays well
     #*
     foreach my $item (@_) {
-        if ($item eq 'msgstr ""' || $item eq '\n') {
-            push(@r, $item);
+        if ( $item eq 'msgstr ""' || $item eq '\n' ) {
+            push( @r, $item );
             next;
         }
-        unless ($seen{$item}) {
+        unless ( $seen{$item} ) {
             push @r, $item;
             $seen{$item} = 1;
         }
