@@ -25,8 +25,9 @@ https://www.transifex.com/projects/p/commotion-user-interface/
 2. Install prerequisite modules:
   a. From a terminal prompt, install cpanm (`cpan App::cpanm`).
   b. Use cpanm to install modules (e.g., `cpanm File::Copy`).
-3. Change to the scripts directory (`cd scripts`).
-4. Run `parse.pl`. Newly generated PO files will be written to `scripts/working/translations/` and must be manually added to luci-i18n-commotion for upload to github.
+3. Update the PO files in [luci-i18n-commotion](https://github.com/opentechinstitute/luci-i18n-commotion) with the latest translations from [Commotion's Transifex project page](https://www.transifex.com/projects/p/commotion-user-interface/), taking care to rename the downloaded PO file with luci-i18n-commotion's naming conventions.
+4. Change to the Commotion Translation Generator scripts directory (`cd scripts`).
+5. Run `parse.pl`. Newly generated PO files will be written to `scripts/working/translations/` and must be manually added to luci-i18n-commotion for upload to github.
 
 
 ## PO Files
