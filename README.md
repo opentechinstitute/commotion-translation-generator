@@ -65,7 +65,7 @@ msgstr "Nom du point d'accès"
 * Stabilize working directory creation location (https://github.com/opentechinstitute/commotion-translation-generator/issues/2)
 * Pull latest PO files directly from Transifex (https://github.com/opentechinstitute/commotion-translation-generator/issues/6)
 * Automatically create feature branch for new PO files
-..* Automatically upload feature branch to Transifex or luci-i18n-commotion as needed
+  * Automatically upload feature branch to Transifex or luci-i18n-commotion as needed
 
 **2. Integrate With Project Infrastructure**
 * Find permanent server-side home
