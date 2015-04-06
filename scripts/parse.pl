@@ -39,7 +39,7 @@ use File::Next;
 use Text::Balanced qw(extract_bracketed extract_delimited extract_tagged);
 use DateTime;
 
-our $VERSION = 0.3.0;
+our $VERSION = 0.3.1;
 
 #**
 # @var verbosity Print debug messages
