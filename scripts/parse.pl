@@ -39,7 +39,7 @@ use File::Next;
 use Text::Balanced qw(extract_bracketed extract_delimited extract_tagged);
 use DateTime;
 
-our $VERSION = 0.3.0;
+our $VERSION = 0.3.1;
 
 #**
 # @var verbosity Print debug messages
@@ -71,14 +71,22 @@ my %repos = (
         'source' => 'https://github.com/opentechinstitute/commotion-feed.git',
         'branch' => 'master',
     },
+    'commotion-dnsproxy' => {
+        'source' => 'https://github.com/opentechinstitute/commotion-dnsproxy.git',
+        'branch' => 'master',
+    },
     'commotiond' => {
         'source' => 'https://github.com/opentechinstitute/commotiond.git',
         'branch' => 'master',
     },
     'commotion-service-manager' => {
         'source' =>
-          'https://github.com/opentechinstitute/commotion-service-manager.git',
+        'https://github.com/opentechinstitute/commotion-service-manager.git',
         'branch' => 'master',
+    },
+    'luci' => {
+        'source' => 'https://github.com/opentechinstitute/luci.git',
+        'branch' => 'master', 
     },
     'luci-commotion' => {
         'source' => 'https://github.com/opentechinstitute/luci-commotion.git',
